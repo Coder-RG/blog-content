@@ -63,13 +63,7 @@ class Slider:
             new_state = state+action
             self.env[state] = 0
             self.env[new_state] = 1
-            if action == 1 and new_state != 6:
-                reward = 1
-            elif action == 1 and new_state == 6:
-                reward = 10
-            else:
-                reward = 0
-            # reward = 10 if new_state == 6 else 0
+            reward = 10 if new_state == 6 else -1
         return new_state, reward
     
     def show_functions(self):
@@ -89,9 +83,10 @@ class Slider:
 
 def plot_graphs(reward_graph, episode_graph):
     # Plot useful information
-    fig, axs = plt.subplots(1,2, figsize=(5,2.7), layout='constrained')
+    fig, axs = plt.subplots(1,2, figsize=(9.5,2.9), layout='constrained')
     axs[0].plot(range(len(reward_graph)), reward_graph, label='reward')
-    axs[0].plot((0,len(reward_graph)-1), (15, 15), color='red', linestyle='dashed',label='y=0')
+    axs[0].plot((0,len(reward_graph)-1), (0, 0), color='red',
+                linestyle='dashed',label='y=0')
     axs[0].set_title("Reward per episode")
     axs[0].set_xlabel("Episode")
     axs[0].set_ylabel("Reward")
@@ -101,9 +96,8 @@ def plot_graphs(reward_graph, episode_graph):
     axs[1].set_xlabel("Episode")
     axs[1].set_ylabel("Legth")
     axs[1].legend()
+    fig.savefig('SliderReward3graphs.png',transparent=True,dpi=80)
     plt.show()
-    fig.savefig('graphs.png',transparent=True,dpi=80)
-    #fig.savefig('graphs.svg',transparent=True,dpi=80)
     return 0
 
 def run_exp(num_iterations=100):
@@ -113,13 +107,13 @@ def run_exp(num_iterations=100):
 
     # This will record all the steps during an episode
     # file = open('episodes.txt','w')
-    game.reset()
     for episode in range(num_iterations):
         # Used to count the number of moves in a single iteration
         # file.write(f'Ep{episode:>3}: 0')
         state = 0
         moves = 0
         episodic_reward = 0
+        game.reset()
         while state != 6:# and moves < 20:
             action = game.get_action(state)
             new_state, reward = game.step(state, action)
@@ -134,7 +128,6 @@ def run_exp(num_iterations=100):
             # file.write(f'{"<-" if action==-1 else "->"}{new_state}')
         episode_graph.append(moves)
         reward_graph.append(episodic_reward)
-        game.reset()
         # file.write('\n')
     # file.close()
     
@@ -144,6 +137,6 @@ def run_exp(num_iterations=100):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        run_exp(10)
+        run_exp(50)
     else:
         run_exp(int(sys.argv[1]))
