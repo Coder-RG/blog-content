@@ -1,0 +1,45 @@
+<mujoco model='quadrotor'>
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="1 1 1"
+            rgb2=".6 .8 1" width="256" height="256"/>
+    </asset>
+    <worldbody>
+        <geom name='floor' type='plane' size='5 5 .1' rgba="1 0 0 .5"/>
+        <site name="origin" type="sphere" size=".1" rgba="0 0 0 1"/>
+        <site name="posx" type="sphere" size=".1" pos=".2 0 0" rgba="0 0 1 1"/>
+        <site name="posy" type="sphere" size=".1" pos="0 .2 0" rgba="0 1 0 1"/>
+
+        <body pos='0 0 3' name='quad'>
+            <joint type='free' pos='0 0 0'/>
+            <geom name="quadbody" type="box" size=".1 .1 .01" mass="0.1" rgba=".2 .9 .9 1"/>
+            <body pos=".1 .1 0" name="quadarm1" euler="0 0 45">
+                <geom name="arm1" type="box" pos="0 0 0" size=".1 .01 .005" mass=".01"/>
+                <geom name="rotor1" type="cylinder" pos=".1 .0 0.005" size=".05 .002" rgba="0 0 1 1" mass="0.0025"/>
+                <site name="motor1" type="cylinder" pos=".1 .0 0" size=".05 .002" rgba="0 0 0 0"/>
+            </body>
+            <body pos="-0.1 .1 0" name="quadarm2" euler="0 0 -45">
+                <geom name="arm2" type="box" pos="0 0 0" size=".1 .01 .005" mass=".01"/>
+                <geom name="rotor2" type="cylinder" pos="-0.1 0 0.005" size=".05 .002" rgba="0 0 1 1" mass="0.0025"/>
+                <site name="motor2" type="cylinder" pos="-0.1 0 0" size=".05 .002" rgba="0 0 0 0"/>
+            </body>
+            <body pos="-0.1 -0.1 0" name="quadarm3" euler="0 0 45">
+                <geom name="arm3" type="box" pos="0 0 0" size=".1 .01 .005" mass=".01"/>
+                <geom name="rotor3" type="cylinder" pos="-0.1 0 0.005" size=".05 .002" rgba="0 0 1 1" mass="0.0025"/>
+                <site name="motor3" type="cylinder" pos="-0.1 0 0" size=".05 .002" rgba="0 0 0 0"/>
+            </body>
+            <body pos=".1 -0.1 0" name="quadarm4" euler="0 0 -45">
+                <geom name="arm4" type="box" pos="0 0 0" size=".1 .01 .005" mass=".01"/>
+                <geom name="rotor4" type="cylinder" pos=".1 0 0.005" size=".05 .002" rgba="0 0 1 1" mass="0.0025"/>
+                <site name="motor4" type="cylinder" pos=".1 0 0" size=".05 .002" rgba="0 0 0 0"/>
+            </body>
+        </body>
+    </worldbody>
+    
+    <!-- Actual rotors -->
+    <actuator>
+        <motor ctrllimited="true" ctrlrange="0.0 1.0" gear="0 0. 1. 0. 0. -0.1" site="motor1"/>
+        <motor ctrllimited="true" ctrlrange="0.0 1.0" gear="0 0. 1. 0. 0. 0.1" site="motor2"/>
+        <motor ctrllimited="true" ctrlrange="0.0 1.0" gear="0 0. 1. 0. 0. -0.1" site="motor3"/>
+        <motor ctrllimited="true" ctrlrange="0.0 1.0" gear="0 0. 1. 0. 0. 0.1" site="motor4"/>
+    </actuator>
+</mujoco>
